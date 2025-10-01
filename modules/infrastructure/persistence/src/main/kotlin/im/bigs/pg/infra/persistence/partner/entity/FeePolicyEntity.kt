@@ -26,4 +26,7 @@ class FeePolicyEntity(
     var percentage: BigDecimal,
     @Column(precision = 15, scale = 0)
     var fixedFee: BigDecimal? = null,
-)
+) {
+    // JPA를 위한 protected no-arg constructor
+    protected constructor() : this(null, 0L, Instant.now(), BigDecimal.ZERO, null)
+}

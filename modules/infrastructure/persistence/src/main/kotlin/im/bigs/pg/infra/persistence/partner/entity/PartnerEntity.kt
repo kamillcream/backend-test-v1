@@ -13,7 +13,7 @@ import jakarta.persistence.Table
  */
 @Entity
 @Table(name = "partner")
-class PartnerEntity(
+class PartnerEntity (
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     @Column(nullable = false, unique = true)
@@ -22,4 +22,7 @@ class PartnerEntity(
     var name: String,
     @Column(nullable = false)
     var active: Boolean = true,
-)
+) {
+    // JPA를 위한 protected no-arg constructor
+    protected constructor() : this(null, "", "", true)
+}
