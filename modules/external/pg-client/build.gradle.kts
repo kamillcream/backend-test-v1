@@ -14,6 +14,7 @@ dependencies {
     implementation(projects.modules.domain)
     implementation(libs.spring.boot.starter.web)
     implementation(kotlin("stdlib-jdk8"))
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 }
 repositories {
     mavenCentral()
