@@ -10,4 +10,12 @@ data class PgApproveResult(
     @get:JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     val approvedAt: LocalDateTime,
     val status: PaymentStatus = PaymentStatus.APPROVED,
-)
+) {
+    companion object {
+        fun from(pgApproveResult: TestPgApproveResult) = PgApproveResult(
+            approvalCode = pgApproveResult.approvalCode,
+            approvedAt = pgApproveResult.approvedAt,
+            status = pgApproveResult.status
+        )
+    }
+}
