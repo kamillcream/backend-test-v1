@@ -42,4 +42,21 @@ class PaymentEntity(
     var createdAt: Instant,
     @Column(nullable = false)
     var updatedAt: Instant,
-)
+) {
+    // JPA를 위한 protected no-arg constructor
+    protected constructor() : this(
+        id = null,
+        partnerId = 0L,
+        amount = BigDecimal.ZERO,
+        appliedFeeRate = BigDecimal.ZERO,
+        feeAmount = BigDecimal.ZERO,
+        netAmount = BigDecimal.ZERO,
+        cardBin = null,
+        cardLast4 = null,
+        approvalCode = "",
+        approvedAt = Instant.now(),
+        status = "PENDING",
+        createdAt = Instant.now(),
+        updatedAt = Instant.now(),
+    )
+}
