@@ -24,6 +24,7 @@ dependencies {
     testImplementation(libs.spring.mockk)
     testImplementation(libs.database.h2)
     implementation(kotlin("stdlib-jdk8"))
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 }
 repositories {
     mavenCentral()
