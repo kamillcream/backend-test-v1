@@ -4,9 +4,9 @@ import im.bigs.pg.application.partner.port.out.FeePolicyOutPort
 import im.bigs.pg.application.partner.port.out.PartnerOutPort
 import im.bigs.pg.application.payment.port.`in`.PaymentCommand
 import im.bigs.pg.application.payment.port.out.PaymentOutPort
-import im.bigs.pg.application.pg.port.out.PgApproveRequest
 import im.bigs.pg.application.pg.port.out.PgApproveResult
 import im.bigs.pg.application.pg.port.out.PgClientOutPort
+import im.bigs.pg.application.pg.port.out.PgClientRouter
 import im.bigs.pg.domain.partner.FeePolicy
 import im.bigs.pg.domain.partner.Partner
 import im.bigs.pg.domain.payment.Payment
@@ -26,17 +26,21 @@ class 결제서비스Test {
     private val partnerRepo = mockk<PartnerOutPort>()
     private val feeRepo = mockk<FeePolicyOutPort>()
     private val paymentRepo = mockk<PaymentOutPort>()
-    private val pgClient = object : PgClientOutPort {
-        override fun supports(partnerId: Long) = true
-        override fun approve(request: PgApproveRequest) =
-            PgApproveResult("APPROVAL-123", LocalDateTime.of(2024,1,1,0,0), PaymentStatus.APPROVED)
-    }
+    val pgClient = mockk<PgClientOutPort>()
+    val pgClientRouter = mockk<PgClientRouter>()
 
     @Test
     @DisplayName("결제 시 수수료 정책을 적용하고 저장해야 한다")
     fun `결제 시 수수료 정책을 적용하고 저장해야 한다`() {
-        val service = PaymentService(partnerRepo, feeRepo, paymentRepo, listOf(pgClient))
-        every { partnerRepo.findById(1L) } returns Partner(1L, "TEST", "Test", true)
+        val service = PaymentService(partnerRepo, feeRepo, paymentRepo, pgClientRouter)
+
+        every { pgClientRouter.getAdapter("TESTPAY") } returns pgClient
+        every { pgClient.approve(any()) } returns PgApproveResult(
+            approvalCode = "APPRV001",
+            approvedAt = LocalDateTime.now(),
+            status = PaymentStatus.APPROVED
+        )
+        every { partnerRepo.findById(1L) } returns Partner(1L, "TESTPAY", "Test", true)
         every { feeRepo.findEffectivePolicy(1L, any()) } returns FeePolicy(
             id = 10L, partnerId = 1L, effectiveFrom = LocalDateTime.ofInstant(Instant.parse("2020-01-01T00:00:00Z"), ZoneOffset.UTC),
             percentage = BigDecimal("0.0300"), fixedFee = BigDecimal("100")
