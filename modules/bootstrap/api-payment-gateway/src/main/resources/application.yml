@@ -1,14 +1,10 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:pgdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: ""
+    url: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DB}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,6 +12,16 @@ spring:
       hibernate:
         format_sql: true
         jdbc.time_zone: UTC
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    clean-disabled: true
+    validate-on-migrate: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    out-of-order: false
+
   jackson:
     serialization:
       write-dates-as-timestamps: false
@@ -27,5 +33,9 @@ test:
   pg:
     api-key: ${TEST_API_KEY}
     enc: ${TEST_ENC_VALUE}
+
+kakaopay:
+  secretKey: ${KAKAOPAY_SECRET_KEY}
+  cid: ${KAKAOPAY_CLIENT_ID}
 
 
