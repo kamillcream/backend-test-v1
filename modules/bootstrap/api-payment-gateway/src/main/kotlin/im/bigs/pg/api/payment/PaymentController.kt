@@ -8,6 +8,7 @@ import im.bigs.pg.api.payment.dto.CreatePaymentRequest
 import im.bigs.pg.api.payment.dto.PaymentResponse
 import im.bigs.pg.api.payment.dto.QueryResponse
 import im.bigs.pg.api.payment.dto.Summary
+import im.bigs.pg.external.pg.service.KakaoPayService
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -29,7 +30,7 @@ import java.time.LocalDateTime
 @Validated
 class PaymentController(
     private val paymentUseCase: PaymentUseCase,
-    private val queryPaymentsUseCase: QueryPaymentsUseCase,
+    private val queryPaymentsUseCase: QueryPaymentsUseCase
 ): PaymentControllerDocs {
 
     /** 결제 생성 요청 페이로드(간소화된 필드). */
