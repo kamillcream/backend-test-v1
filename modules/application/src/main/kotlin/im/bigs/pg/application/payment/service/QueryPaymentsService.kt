@@ -56,7 +56,6 @@ class QueryPaymentsService(
     private fun encodeCursor(createdAt: Instant?, id: Long?): String? {
         if (createdAt == null || id == null) return null
         val raw = "${createdAt.toEpochMilli()}:$id"
-        println("raw: " + raw)
         return Base64.getUrlEncoder().withoutPadding().encodeToString(raw.toByteArray())
     }
 
