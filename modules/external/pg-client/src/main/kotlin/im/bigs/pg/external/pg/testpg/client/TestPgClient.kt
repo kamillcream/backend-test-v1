@@ -1,11 +1,11 @@
-package im.bigs.pg.external.pg
+package im.bigs.pg.external.pg.testpg.client
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import im.bigs.pg.application.pg.port.out.PgApproveRequest
 import im.bigs.pg.application.pg.port.out.PgApproveResult
 import im.bigs.pg.application.pg.port.out.PgClientOutPort
 import im.bigs.pg.application.pg.port.out.TestPgApproveResult
-import im.bigs.pg.external.pg.config.TestPgProperties
+import im.bigs.pg.external.pg.testpg.config.TestPgProperties
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -14,7 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient
 class TestPgClient(
     private val webClientBuilder: WebClient.Builder,
     private val props: TestPgProperties
-):  PgClientOutPort{
+): PgClientOutPort {
     private val baseUrl = "https://api-test-pg.bigs.im"
     private val objectMapper = jacksonObjectMapper()
     override fun supports(partnerCode: String): Boolean = partnerCode.contains("TESTPAY")
@@ -34,7 +34,7 @@ class TestPgClient(
             .bodyToMono(TestPgApproveResult::class.java)
             .block() ?: throw IllegalStateException("PG Server Response is not expected.")
 
-        return PgApproveResult.from(response)
+        return PgApproveResult.Companion.from(response)
 
     }
 }
