@@ -4,6 +4,7 @@ import im.bigs.pg.api.payment.dto.CreatePaymentRequest
 import im.bigs.pg.api.payment.dto.PaymentResponse
 import im.bigs.pg.api.payment.dto.QueryResponse
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -18,6 +19,28 @@ interface PaymentControllerDocs {
     @Operation(
         summary = "결제 생성",
         description = "결제를 요청하고 그에 대한 결과 요약을 응답으로 받습니다"
+    )
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        required = true,
+        content = [
+            Content(
+                mediaType = "application/json",
+                examples = [
+                    ExampleObject(
+                        name = "기본 요청 예시",
+                        value = """
+                        {
+                          "partnerId": 1,
+                          "amount": 10000,
+                          "cardBin": "123456",
+                          "cardLast4": "4242",
+                          "productName": "테스트 결제"
+                        }
+                        """
+                    )
+                ]
+            )
+        ]
     )
     @ApiResponses(
         value = [
@@ -178,11 +201,20 @@ interface PaymentControllerDocs {
         ]
     )
     fun query(
+        @Parameter(example = "1", description = "파트너 ID")
         @RequestParam(required = false) partnerId: Long?,
+
+        @Parameter(example = "APPROVED", description = "결제 상태 (APPROVED, CANCELED 등)")
         @RequestParam(required = false) status: String?,
+
+        @Parameter(example = "2025-10-05 00:00:00", description = "조회 시작일 (yyyy-MM-dd HH:mm:ss)")
         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") from: LocalDateTime?,
+
+        @Parameter(example = "2025-10-07 23:59:59", description = "조회 종료일")
         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") to: LocalDateTime?,
+
         @RequestParam(required = false) cursor: String?,
+
         @RequestParam(defaultValue = "20") limit: Int,
     ): ResponseEntity<QueryResponse>
 }
