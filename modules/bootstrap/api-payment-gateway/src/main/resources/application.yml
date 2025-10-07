@@ -5,6 +5,7 @@ spring:
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
 
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,9 +15,9 @@ spring:
         jdbc.time_zone: UTC
 
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:db/migration
-    clean-disabled: true
+    clean-disabled: false
     validate-on-migrate: true
     baseline-on-migrate: true
     baseline-version: 0
@@ -36,6 +37,6 @@ test:
 
 kakaopay:
   secretKey: ${KAKAOPAY_SECRET_KEY}
-  cid: ${KAKAOPAY_CLIENT_ID}
+
 
 
