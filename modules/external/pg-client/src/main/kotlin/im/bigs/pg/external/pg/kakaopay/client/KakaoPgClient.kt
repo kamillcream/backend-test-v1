@@ -1,14 +1,13 @@
-package im.bigs.pg.external.pg
+package im.bigs.pg.external.pg.kakaopay.client
 
 import im.bigs.pg.application.pg.port.out.PgApproveRequest
 import im.bigs.pg.application.pg.port.out.PgApproveResult
 import im.bigs.pg.application.pg.port.out.PgClientOutPort
 import im.bigs.pg.domain.payment.PaymentStatus
-import im.bigs.pg.external.pg.dto.KakaoPayRequestDto
-import im.bigs.pg.external.pg.service.KakaoPayService
+import im.bigs.pg.external.pg.kakaopay.dto.KakaoPayRequestDto
+import im.bigs.pg.external.pg.kakaopay.service.KakaoPayService
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
-
 
 @Component
 class KakaoPgClient(
@@ -22,14 +21,13 @@ class KakaoPgClient(
             cid = "TC0ONETIME",
             partnerOrderId = request.partnerId.toString(),
             partnerUserId = "TEST_USER1",
-            itemName = "TEST_ITEM1",
+            itemName = "초코파이",
             quantity = 3,
             totalAmount = request.amount.toInt(),
             taxFreeAmount = 0,
             approvalUrl = "http://localhost:8080" + "/success",
-            failUrl = "http://blaybus-glowup.com" + "/fail",
-            cancelUrl = "http://blaybus-glowup.com" + "/cancel",
-
+            failUrl = "http://localhost:8080" + "/fail",
+            cancelUrl = "http://localhost:8080" + "/cancel"
         )
 
         val kakaoResponse = kakaoPayService.kakaoPayReady(kakaoRequest)
